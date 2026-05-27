@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>jolly</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">Jolly's Personal Assistant</div>
+    <div class="sync">
+      <span id="sync-status">loading…</span>
+      <button id="refresh-btn" type="button">refresh</button>
+      <button id="theme-btn" class="icon-btn" type="button" aria-label="toggle theme" title="toggle theme">☾</button>
+    </div>
+  </header>
+
+  <main class="grid">
+    <section class="card wide" id="today-card">
+      <div class="card-head">
+        <h2>today <span class="count-badge" id="today-count">0</span></h2>
+      </div>
+      <div class="row" id="today-list"></div>
+    </section>
+
+    <section class="card wide" id="my-prs-card">
+      <div class="card-head">
+        <h2>my open PRs <span class="count-badge" id="my-prs-count">0</span></h2>
+        <div class="chips" id="my-prs-chips"></div>
+      </div>
+      <div class="row" id="my-prs-list"></div>
+    </section>
+
+    <section class="card wide" id="reviews-card">
+      <div class="card-head">
+        <h2>review requests <span class="count-badge" id="reviews-count">0</span></h2>
+        <div class="chips" id="reviews-chips"></div>
+      </div>
+      <div class="row" id="reviews-list"></div>
+    </section>
+
+    <section class="card wide" id="week-card">
+      <div class="card-head">
+        <h2>this week <span class="count-badge" id="week-count">0</span></h2>
+      </div>
+      <div id="week-grid"></div>
+    </section>
+
+    <section class="card wide" id="all-tickets-card">
+      <div class="card-head">
+        <h2>all assigned tickets <span class="count-badge" id="all-tickets-count">0</span></h2>
+        <div class="chips" id="all-tickets-chips"></div>
+      </div>
+      <div class="list" id="all-tickets-list"></div>
+    </section>
+  </main>
+
+  <div id="modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-card">
+      <header class="modal-head">
+        <h3 id="modal-title">PR review</h3>
+        <button class="close" id="modal-close" type="button" aria-label="close">×</button>
+      </header>
+      <div class="modal-body" id="modal-body"></div>
+    </div>
+  </div>
+
+  <script>window.JOLLY_POLL_SECONDS = {{ poll_seconds }};</script>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
