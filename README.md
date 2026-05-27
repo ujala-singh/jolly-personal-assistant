@@ -1,4 +1,4 @@
-# jolly
+# Jolly's Personal Assistant
 
 A personal command center, served locally. One page that shows:
 

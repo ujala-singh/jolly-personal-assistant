@@ -4,11 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>jolly</title>
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}">
 </head>
 <body>
   <header class="topbar">
-    <div class="brand">Jolly's Personal Assistant</div>
+    <a class="brand" href="/" aria-label="Jolly home">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <circle cx="7"  cy="7"  r="4.5" fill="#38bdf8"/>
+          <circle cx="17" cy="7"  r="4.5" fill="#a78bfa"/>
+          <circle cx="7"  cy="17" r="4.5" fill="#4ade80"/>
+          <circle cx="17" cy="17" r="4.5" fill="#fbbf24"/>
+        </svg>
+      </span>
+      <span class="brand-text">Jolly's Personal Assistant</span>
+    </a>
     <div class="sync">
       <span id="sync-status">loading…</span>
       <button id="refresh-btn" type="button">refresh</button>
