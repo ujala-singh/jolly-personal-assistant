@@ -1,4 +1,5 @@
 """Environment-backed configuration. Loaded once at import time."""
+
 from __future__ import annotations
 
 import os

@@ -1,11 +1,12 @@
 """Flask app: dashboard JSON, ticket transitions, Claude PR review jobs."""
+
 from __future__ import annotations
 
 from flask import Flask, jsonify, render_template, request
 
 from jolly.clients import jira, linear
-from jolly.clients.linear import LinearError
 from jolly.clients.jira import JiraError
+from jolly.clients.linear import LinearError
 from jolly.config import config
 from jolly.services import claude_review, dashboard
 

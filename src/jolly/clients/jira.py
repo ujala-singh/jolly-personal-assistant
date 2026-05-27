@@ -1,4 +1,5 @@
 """Jira Cloud REST v3 client. Uses Basic auth with email + API token."""
+
 from __future__ import annotations
 
 import base64
@@ -89,11 +90,14 @@ def _normalize(raw: dict, sprint_field: str) -> dict:
 
 def transitions(issue_key: str) -> list[dict]:
     data = _get(f"/rest/api/3/issue/{issue_key}/transitions")
-    return [{
-        "id": t["id"],
-        "name": t["name"],
-        "to": (t.get("to") or {}).get("name"),
-    } for t in data.get("transitions", [])]
+    return [
+        {
+            "id": t["id"],
+            "name": t["name"],
+            "to": (t.get("to") or {}).get("name"),
+        }
+        for t in data.get("transitions", [])
+    ]
 
 
 def transition(issue_key: str, transition_id: str) -> None:

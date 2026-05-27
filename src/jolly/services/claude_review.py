@@ -1,10 +1,11 @@
 """Async PR review jobs. Shells out to `gh pr diff | claude -p`."""
+
 from __future__ import annotations
 
 import subprocess
 import threading
 import uuid
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Literal
 
 from jolly.clients import github
@@ -58,7 +59,7 @@ def _set(job_id: str, **fields) -> None:
 
 
 def _now() -> str:
-    return datetime.now(timezone.utc).isoformat()
+    return datetime.now(UTC).isoformat()
 
 
 def _run(job_id: str, repo: str, number: int) -> None:
@@ -88,5 +89,5 @@ def _run(job_id: str, repo: str, number: int) -> None:
     except subprocess.CalledProcessError as exc:
         message = (exc.stderr or exc.stdout or "claude exited non-zero").strip()
         _set(job_id, status="error", error=message, finishedAt=_now())
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         _set(job_id, status="error", error=f"{type(exc).__name__}: {exc}", finishedAt=_now())

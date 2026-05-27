@@ -2,7 +2,7 @@
 
 A personal command center, served locally. One page that shows:
 
-- **Today** — tickets currently in progress or in your active Linear cycle / Jira sprint
+- **Today** — tickets currently in progress (or in your active Linear cycle / Jira sprint) alongside today's Google Calendar events
 - **This week** — Mon–Fri Google Calendar events
 - **All assigned tickets** — every open Linear + Jira issue assigned to you, with one-click state transitions
 - **My open PRs** — checks status, review decision, draft/conflict state, links
@@ -90,6 +90,45 @@ src/jolly/
 └── static/
     ├── app.css
     └── app.js
+```
+
+## Tests
+
+```bash
+uv sync              # pulls dev deps (pytest, pytest-cov)
+uv run pytest        # run the suite
+uv run pytest --cov  # with coverage report
+```
+
+### Lint + format
+
+```bash
+uv run ruff check src tests          # lint
+uv run ruff check --fix src tests    # lint + apply safe fixes
+uv run ruff format src tests         # format (drop-in for black)
+uv run ruff format --check src tests # CI-style format check, no writes
+```
+
+CI runs **two parallel jobs** on every push to `main` and on PR `opened` / `synchronize` / `edited` / `reopened` — see `.github/workflows/tests.yml`:
+
+| Job | What it does |
+|---|---|
+| `ruff` | `ruff check` + `ruff format --check` |
+| `pytest` | full test suite with coverage; uploads `coverage.xml` and `htmlcov/` as artifacts |
+
+The suite mocks every subprocess (`gh`, `claude`) and HTTP call (`httpx`), so nothing hits the real Jira / Linear / GitHub / Google APIs. Runs in under 4 seconds. Layout:
+
+```
+tests/
+├── conftest.py                       # fixtures: flask client, config override, sync threads, fake httpx response
+├── test_config.py                    # env loading, enabled flags, URL parsing
+├── test_clients_github.py            # check rollup, PR enrichment, gh subprocess paths
+├── test_clients_linear.py            # auth header, state filtering, transitions
+├── test_clients_jira.py              # auth, field normalization, sprint detection, transitions
+├── test_clients_gcal.py              # week dates, ICS parsing, recurring-event expansion
+├── test_services_dashboard.py        # daily filter, merge, parallel snapshot with mocked clients
+├── test_services_claude_review.py    # job lifecycle: pending → done / error / timeout
+└── test_app.py                       # every Flask route
 ```
 
 ## Notes

@@ -3,6 +3,7 @@
 No OAuth — each Google Calendar exposes a private "secret address in iCal format".
 Multiple calendars supported via comma-separated URLs in `GCAL_ICS_URLS`.
 """
+
 from __future__ import annotations
 
 from datetime import date, datetime, timedelta
@@ -48,7 +49,7 @@ def week_schedule(today: date | None = None) -> list[dict]:
     for url in config.gcal_ics_urls:
         try:
             events.extend(_fetch_one(url, monday, saturday))
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:
             errors.append(f"{_short_url(url)}: {exc}")
 
     if errors and not events:
@@ -78,7 +79,9 @@ def _to_event(component) -> dict:
 
     if isinstance(dtstart, datetime):
         start_local = dtstart.astimezone() if dtstart.tzinfo else dtstart
-        end_local = (dtend.astimezone() if isinstance(dtend, datetime) and dtend.tzinfo else dtend) or start_local
+        end_local = (
+            dtend.astimezone() if isinstance(dtend, datetime) and dtend.tzinfo else dtend
+        ) or start_local
         return {
             "startDate": start_local.date().isoformat(),
             "startTime": start_local.strftime("%H:%M"),

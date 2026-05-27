@@ -1,4 +1,5 @@
 """Linear GraphQL client. Read assigned issues + transition workflow state."""
+
 from __future__ import annotations
 
 import httpx
