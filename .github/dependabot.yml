@@ -1,0 +1,52 @@
+# Dependabot keeps deps and CI actions current. Two ecosystems:
+#   1. uv  — picks up pyproject.toml + uv.lock
+#   2. github-actions — picks up .github/workflows/*.yml
+#
+# Docs: https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+version: 2
+updates:
+  # Python dependencies (Flask, httpx, icalendar, ruff, pytest, ...)
+  - package-ecosystem: "uv"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "Asia/Kolkata"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "python"
+    commit-message:
+      prefix: "deps"
+      include: "scope"
+    groups:
+      # Bundle non-breaking updates into a single PR to cut review noise.
+      # Major bumps still get their own PR.
+      python-minor-patch:
+        patterns: ["*"]
+        update-types:
+          - "minor"
+          - "patch"
+
+  # GitHub Actions versions used in .github/workflows/
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "Asia/Kolkata"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "github-actions"
+    commit-message:
+      prefix: "ci"
+      include: "scope"
+    groups:
+      actions-minor-patch:
+        patterns: ["*"]
+        update-types:
+          - "minor"
+          - "patch"
